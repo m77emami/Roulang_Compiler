@@ -14,13 +14,13 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        SyntaxRecognition lexicalAnalyzer = new SyntaxRecognition(new FileReader("test.txt"));
+        SyntaxRecognition lexicalAnalyzer = new SyntaxRecognition(new FileReader("maxInArr.txt"));
         CodeGenerator codeGenerator = new CodeGenerator(lexicalAnalyzer);
         parseInput(lexicalAnalyzer, codeGenerator);
     }
 
     private static void parseInput(SyntaxRecognition lexicalAnalyzer, CodeGenerator codeGenerator) {
-        Parser parser = new Parser(lexicalAnalyzer, codeGenerator, "src/main/java/ir/ac/sbu/syntax/syntax.npt");
+        Parser parser = new Parser(lexicalAnalyzer, codeGenerator, "src/ir/ac/sbu/Parser/ParseTable.npt");
         AST result;
         try {
             // Parse given file

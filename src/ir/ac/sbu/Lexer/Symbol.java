@@ -6,6 +6,7 @@ public class Symbol {
 
     Symbol(String token) {
         this.token = token;
+        this.value = token;
     }
 
     Symbol(String token, Object value) {

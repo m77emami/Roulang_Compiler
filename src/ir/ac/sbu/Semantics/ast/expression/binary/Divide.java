@@ -15,6 +15,7 @@ public class Divide extends BinaryExpression {
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         getFirstOperand().codegen(cw, mv);
         getSecondOperand().codegen(cw, mv);
-        mv.visitInsn(Opcodes.IDIV);
+
+        mv.visitInsn(type.getOpcode(Opcodes.IDIV));
     }
 }

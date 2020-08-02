@@ -15,6 +15,7 @@ public class Multiply extends BinaryExpression {
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         getFirstOperand().codegen(cw, mv);
         getSecondOperand().codegen(cw, mv);
-        mv.visitInsn(Opcodes.IMUL);
+
+        mv.visitInsn(type.getOpcode(Opcodes.IMUL));
     }
 }

@@ -72,13 +72,14 @@ SpecialCharacter = [\t\r\n\"\'\\]  //\'[\\][^]\'
 //default state : YYINITIAL
 <YYINITIAL>{
 //Reserved Key words
-"int"                     {return symbol("int");}
-"short"                   {return symbol("short");}
-"long"                    {return symbol("long");}
-"float"                   {return symbol("float");}
-"double"                  {return symbol("double");}
-"char"                    {return symbol("char");}
-"string"                  {return symbol("string");}
+"start"                     {return symbol("start");}
+"int"                     {return symbol("type_name");}
+"short"                   {return symbol("type_name");}
+"long"                    {return symbol("type_name");}
+"float"                   {return symbol("type_name");}
+"double"                  {return symbol("type_name");}
+"char"                    {return symbol("type_name");}
+"string"                  {return symbol("type_name");}
 "const"                   {return symbol("const");}
 "for"                     {return symbol("for");}
 "foreach"                 {return symbol("foreach");}
@@ -100,7 +101,7 @@ SpecialCharacter = [\t\r\n\"\'\\]  //\'[\\][^]\'
 "static"                  {return symbol("static");}
 "goto"                    {return symbol("goto");}
 "signed"                  {return symbol("signed");}
-"bool"                    {return symbol("bool");}
+"bool"                    {return symbol("type_name");}
 "void"                    {return symbol("void");}
 "return"                  {return symbol("return");}
 "record"                  {return symbol("record");}
@@ -125,15 +126,18 @@ SpecialCharacter = [\t\r\n\"\'\\]  //\'[\\][^]\'
 "not"                   {return symbol("not");}
 "|"                     {return symbol("|");}
 "^"                     {return symbol("^");}
-"*"                     {return symbol("++");}
+"*"                     {return symbol("*");}
 "+"                     {return symbol("+");}
 "+="                    {return symbol("+=");}
 "."                     {return symbol(".");}
-","                     {return symbol(",");}
+","                     {return symbol("comma");}
 ":"                     {return symbol(":");}
 ";"                     {return symbol(";");}
+"]["                     {return symbol("][");}
 "["                     {return symbol("[");}
 "]"                     {return symbol("]");}
+"{"                     {return symbol("{");}
+"}"                     {return symbol("}");}
 "++"                    {return symbol("++");}
 "--"                    {return symbol("--");}
 "-"                     {return symbol("-");}
@@ -149,13 +153,13 @@ SpecialCharacter = [\t\r\n\"\'\\]  //\'[\\][^]\'
 
 
 //Numbers
-{Decimal}                 {return symbol("const_int", Integer.parseInt(yytext()));}
-{Long}                    {return symbol("const_long", Long.parseLong(yytext().substring(0, yytext().length() - 1)));}
-{HexInteger}              {return symbol("const_int", Integer.parseInt(yytext().substring(2), 16));}
+{Decimal}                 {return symbol("int_literal", Integer.parseInt(yytext()));}
+{Long}                    {return symbol("int_literal", Long.parseLong(yytext().substring(0, yytext().length() - 1)));}
+{HexInteger}              {return symbol("int_literal", Integer.parseInt(yytext().substring(2), 16));}
 {HexLong}                 {return symbol("const_long", Long.parseLong(yytext().substring(2, yytext().length() - 1), 16));}
-{DoubleReal}              {return symbol("const_double", Double.parseDouble(yytext()));}
-{FloatReal}               {return symbol("const_float", Float.parseFloat(yytext().substring(0, yytext().length() - 1)));}
-{Scientific}              {return symbol("const_double", Double.parseDouble(yytext()));}
+{DoubleReal}              {return symbol("real_literal", Double.parseDouble(yytext()));}
+{FloatReal}               {return symbol("real_literal", Float.parseFloat(yytext().substring(0, yytext().length() - 1)));}
+{Scientific}              {return symbol("real_literal", Double.parseDouble(yytext()));}
 
 //String
 \"                        {str = new StringBuilder();yybegin(String_state);}
@@ -172,11 +176,12 @@ SpecialCharacter = [\t\r\n\"\'\\]  //\'[\\][^]\'
 
 //Others
 {whiteSpace}              {/* do nothing */}
+<<EOF>>                   {return new Symbol("$");}
 [^]                       {System.err.println("Error: Unidentified token.");}
 }
 
 <String_state>{
-\"                        {str = new StringBuilder(); yybegin(YYINITIAL); return symbol("const_string", str.toString());}
+\"                        {str = new StringBuilder(); yybegin(YYINITIAL); return symbol("string_literal", str.toString());}
 [^]                       {str.append(yytext());}
 }
 
@@ -187,6 +192,6 @@ SpecialCharacter = [\t\r\n\"\'\\]  //\'[\\][^]\'
 }
 
 <Character_finish>{
-\'                        {yybegin(YYINITIAL); return symbol("const_char", ch);}
+\'                        {yybegin(YYINITIAL); return symbol("char_literal", ch);}
 [^]                       {yybegin(YYINITIAL); System.err.println("Error: Insufficient number of characters in ''.");}
 }

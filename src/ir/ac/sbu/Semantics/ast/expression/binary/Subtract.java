@@ -15,6 +15,7 @@ public class Subtract extends BinaryExpression {
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         getFirstOperand().codegen(cw, mv);
         getSecondOperand().codegen(cw, mv);
-        mv.visitInsn(Opcodes.ISUB);
+
+        mv.visitInsn(type.getOpcode(Opcodes.ISUB));
     }
 }

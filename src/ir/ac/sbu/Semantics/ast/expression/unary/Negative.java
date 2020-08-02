@@ -14,6 +14,6 @@ public class Negative extends UnaryExpression {
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         getOperand().codegen(cw, mv);
-        mv.visitInsn(Opcodes.INEG);
+        mv.visitInsn(type.getOpcode(Opcodes.INEG));
     }
 }
