@@ -23,7 +23,7 @@ public class TypeCast extends UnaryExpression {
             return;
 
         if(cast != Type.INT_TYPE && cast != Type.LONG_TYPE && cast != Type.DOUBLE_TYPE && cast != Type.FLOAT_TYPE)
-            throw new RuntimeException("Not able to cast.");
+            throw new RuntimeException("Not able to cast to " + cast.getClassName());
 
         mv.visitInsn(castingOpCode(type, cast));
         type = cast;

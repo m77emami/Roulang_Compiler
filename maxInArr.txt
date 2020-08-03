@@ -1,29 +1,47 @@
 function void start(){
 	
 	/** arithmetic Operations**/
-	int number1 = 432;
-	long number2 = 19e+2;
-	bool cmp = number1 > number2;
-	double PI = 3.14;
+	double number1 = 432.;
+	double number2 = 19e+2;
+	bool b = true;
+	int a = 4 ;
+	int c = a +1 ;
+	println(c);
+	/*if (b){
+		println();
+		println();
+	}*/
+	/*switch (c) of : begin
+		case 3:{
+			println();
+		}
+		case 2:{
+			println();
+		}
+	
+	end*/
+	//println(sum);
+	//bool cmp = number1 > number2;
+	/*double PI = 3.14;
 	double Area1 = PI * number1 * number1;
-	long Area2 = PI * number2 * number2;
+	double Area2 = PI * number2 * number2;
 	println(Area1);
-	println(Area2);
+	println(Area2);*/
 
-	/** Array and Memory Operations 
-	auto arr = new int[5];
+	/**Array and Memory Operations **/
+	/**auto arr = new int[5];
 	for ( int i = 0 ; i<5 ; i++ ) {
 		arr[i] = i;
 	}
 
-	int max = arr[0];
-	for ( int i = 1 ; i<5 ; i++ ) {
-		if ( arr[i]>max ){
-			max = arr[i];
+	//int max = arr[0];
+	/*for ( int j = 1 ; j<5 ; j++ ) {
+		if ( arr[j]>max ){
+			max = arr[j];
 		}
 		continue;
-	}
+	}*/
 
-	println(max);**/
+	//println(max);
 	return;
 }

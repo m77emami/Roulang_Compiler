@@ -2,6 +2,7 @@ package ir.ac.sbu.Semantics.ast.statement.Condition;
 
 import ir.ac.sbu.Semantics.ast.block.Block;
 import ir.ac.sbu.Semantics.ast.expression.Expression;
+import ir.ac.sbu.Semantics.ast.expression.binary.Conditional.EQ;
 import ir.ac.sbu.Semantics.ast.expression.binary.Conditional.NE;
 import ir.ac.sbu.Semantics.ast.expression.constant.IntegerConst;
 import ir.ac.sbu.Semantics.ast.statement.Statement;
@@ -30,7 +31,7 @@ public class If extends Statement {
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         ScopeHandler.getInstance().addScope(ScopeType.IF);
-        NE notEqual = new NE(expression, new IntegerConst(0));
+        EQ notEqual = new EQ(expression, new IntegerConst(0));
         notEqual.codegen(cw, mv);
         mv.visitJumpInsn(IFEQ, startElse);
         ifBlock.codegen(cw, mv);

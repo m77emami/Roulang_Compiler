@@ -1,0 +1,337 @@
+Index: src/ir/ac/sbu/Parser/CodeGenerator.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/ir/ac/sbu/Parser/CodeGenerator.java	(date 1596038851858)
++++ src/ir/ac/sbu/Parser/CodeGenerator.java	(date 1596038851858)
+@@ -0,0 +1,5 @@
++package ir.ac.sbu.Parser;
++
++public interface CodeGenerator {
++    void doSemantic(String sem);
++}
+\ No newline at end of file
+Index: src/ir/ac/sbu/Parser/Lexical.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/ir/ac/sbu/Parser/Lexical.java	(date 1596038851833)
++++ src/ir/ac/sbu/Parser/Lexical.java	(date 1596038851833)
+@@ -0,0 +1,8 @@
++package ir.ac.sbu.Parser;
++
++import ir.ac.sbu.Lexer.Symbol;
++
++public interface Lexical {
++    String nextToken();
++    Symbol currentToken();
++}
+\ No newline at end of file
+Index: src/ir/ac/sbu/Lexer/Symbol.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/ir/ac/sbu/Lexer/Symbol.java	(date 1596038851878)
++++ src/ir/ac/sbu/Lexer/Symbol.java	(date 1596038851878)
+@@ -0,0 +1,23 @@
++package ir.ac.sbu.Lexer;
++
++public class Symbol {
++    private String token;
++    private Object value;
++
++    Symbol(String token) {
++        this.token = token;
++    }
++
++    Symbol(String token, Object value) {
++        this.token = token;
++        this.value = value;
++    }
++
++    public String getToken() {
++        return token;
++    }
++
++    public Object getValue() {
++        return value;
++    }
++}
+Index: src/ir/ac/sbu/Semantics/ast/AST.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/ir/ac/sbu/Semantics/ast/AST.java	(date 1596064396917)
++++ src/ir/ac/sbu/Semantics/ast/AST.java	(date 1596064396917)
+@@ -0,0 +1,8 @@
++package ir.ac.sbu.Semantics.ast;
++
++import org.objectweb.asm.ClassWriter;
++import org.objectweb.asm.MethodVisitor;
++
++public interface AST {
++    void codegen(ClassWriter cw, MethodVisitor mv);
++}
+Index: src/ir/ac/sbu/Semantics/ast/expression/Expression.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/ir/ac/sbu/Semantics/ast/expression/Expression.java	(date 1596064396929)
++++ src/ir/ac/sbu/Semantics/ast/expression/Expression.java	(date 1596064396929)
+@@ -0,0 +1,6 @@
++package ir.ac.sbu.Semantics.ast.expression;
++
++import ir.ac.sbu.Semantics.ast.AST;
++
++public interface Expression extends AST {
++}
+Index: src/ir/ac/sbu/Semantics/ast/expression/unary/Negative.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/ir/ac/sbu/Semantics/ast/expression/unary/Negative.java	(date 1596064396990)
++++ src/ir/ac/sbu/Semantics/ast/expression/unary/Negative.java	(date 1596064396990)
+@@ -0,0 +1,19 @@
++package ir.ac.sbu.Semantics.ast.expression.unary;
++
++import ir.ac.sbu.Semantics.ast.expression.Expression;
++import org.objectweb.asm.ClassWriter;
++import org.objectweb.asm.MethodVisitor;
++import org.objectweb.asm.Opcodes;
++
++public class Negative extends UnaryExpression {
++
++    public Negative(Expression operand) {
++        super(operand);
++    }
++
++    @Override
++    public void codegen(ClassWriter cw, MethodVisitor mv) {
++        getOperand().codegen(cw, mv);
++        mv.visitInsn(Opcodes.INEG);
++    }
++}
+Index: src/ir/ac/sbu/Semantics/ast/expression/unary/UnaryExpression.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/ir/ac/sbu/Semantics/ast/expression/unary/UnaryExpression.java	(date 1596064396948)
++++ src/ir/ac/sbu/Semantics/ast/expression/unary/UnaryExpression.java	(date 1596064396948)
+@@ -0,0 +1,15 @@
++package ir.ac.sbu.Semantics.ast.expression.unary;
++
++import ir.ac.sbu.Semantics.ast.expression.Expression;
++
++public abstract class UnaryExpression implements Expression {
++    private Expression operand;
++
++    public UnaryExpression(Expression operand) {
++        this.operand = operand;
++    }
++
++    public Expression getOperand() {
++        return operand;
++    }
++}
+Index: src/ir/ac/sbu/Semantics/ast/expression/binary/BinaryExpression.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/ir/ac/sbu/Semantics/ast/expression/binary/BinaryExpression.java	(date 1596064396900)
++++ src/ir/ac/sbu/Semantics/ast/expression/binary/BinaryExpression.java	(date 1596064396900)
+@@ -0,0 +1,21 @@
++package ir.ac.sbu.Semantics.ast.expression.binary;
++
++import ir.ac.sbu.Semantics.ast.expression.Expression;
++
++public abstract class BinaryExpression implements Expression {
++    private Expression firstOperand;
++    private Expression secondOperand;
++
++    public BinaryExpression(Expression firstOperand, Expression secondOperand) {
++        this.firstOperand = firstOperand;
++        this.secondOperand = secondOperand;
++    }
++
++    public Expression getFirstOperand() {
++        return firstOperand;
++    }
++
++    public Expression getSecondOperand() {
++        return secondOperand;
++    }
++}
+Index: src/ir/ac/sbu/Semantics/ast/expression/binary/Divide.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/ir/ac/sbu/Semantics/ast/expression/binary/Divide.java	(date 1596064397003)
++++ src/ir/ac/sbu/Semantics/ast/expression/binary/Divide.java	(date 1596064397003)
+@@ -0,0 +1,20 @@
++package ir.ac.sbu.Semantics.ast.expression.binary;
++
++import ir.ac.sbu.Semantics.ast.expression.Expression;
++import org.objectweb.asm.ClassWriter;
++import org.objectweb.asm.MethodVisitor;
++import org.objectweb.asm.Opcodes;
++
++public class Divide extends BinaryExpression {
++
++    public Divide(Expression firstOperand, Expression secondOperand) {
++        super(firstOperand, secondOperand);
++    }
++
++    @Override
++    public void codegen(ClassWriter cw, MethodVisitor mv) {
++        getFirstOperand().codegen(cw, mv);
++        getSecondOperand().codegen(cw, mv);
++        mv.visitInsn(Opcodes.IDIV);
++    }
++}
+Index: src/ir/ac/sbu/Semantics/ast/expression/binary/Mod.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/ir/ac/sbu/Semantics/ast/expression/binary/Mod.java	(date 1596064396966)
++++ src/ir/ac/sbu/Semantics/ast/expression/binary/Mod.java	(date 1596064396966)
+@@ -0,0 +1,20 @@
++package ir.ac.sbu.Semantics.ast.expression.binary;
++
++import ir.ac.sbu.Semantics.ast.expression.Expression;
++import org.objectweb.asm.ClassWriter;
++import org.objectweb.asm.MethodVisitor;
++import org.objectweb.asm.Opcodes;
++
++public class Mod extends BinaryExpression {
++
++    public Mod(Expression firstOperand, Expression secondOperand) {
++        super(firstOperand, secondOperand);
++    }
++
++    @Override
++    public void codegen(ClassWriter cw, MethodVisitor mv) {
++        getFirstOperand().codegen(cw, mv);
++        getSecondOperand().codegen(cw, mv);
++        mv.visitInsn(Opcodes.IREM);
++    }
++}
+Index: src/ir/ac/sbu/Semantics/ast/expression/binary/Multiply.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/ir/ac/sbu/Semantics/ast/expression/binary/Multiply.java	(date 1596064396954)
++++ src/ir/ac/sbu/Semantics/ast/expression/binary/Multiply.java	(date 1596064396954)
+@@ -0,0 +1,20 @@
++package ir.ac.sbu.Semantics.ast.expression.binary;
++
++import ir.ac.sbu.Semantics.ast.expression.Expression;
++import org.objectweb.asm.ClassWriter;
++import org.objectweb.asm.MethodVisitor;
++import org.objectweb.asm.Opcodes;
++
++public class Multiply extends BinaryExpression {
++
++    public Multiply(Expression firstOperand, Expression secondOperand) {
++        super(firstOperand, secondOperand);
++    }
++
++    @Override
++    public void codegen(ClassWriter cw, MethodVisitor mv) {
++        getFirstOperand().codegen(cw, mv);
++        getSecondOperand().codegen(cw, mv);
++        mv.visitInsn(Opcodes.IMUL);
++    }
++}
+Index: src/ir/ac/sbu/Semantics/ast/expression/binary/Subtract.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/ir/ac/sbu/Semantics/ast/expression/binary/Subtract.java	(date 1596064396978)
++++ src/ir/ac/sbu/Semantics/ast/expression/binary/Subtract.java	(date 1596064396978)
+@@ -0,0 +1,20 @@
++package ir.ac.sbu.Semantics.ast.expression.binary;
++
++import ir.ac.sbu.Semantics.ast.expression.Expression;
++import org.objectweb.asm.ClassWriter;
++import org.objectweb.asm.MethodVisitor;
++import org.objectweb.asm.Opcodes;
++
++public class Subtract extends BinaryExpression {
++
++    public Subtract(Expression firstOperand, Expression secondOperand) {
++        super(firstOperand, secondOperand);
++    }
++
++    @Override
++    public void codegen(ClassWriter cw, MethodVisitor mv) {
++        getFirstOperand().codegen(cw, mv);
++        getSecondOperand().codegen(cw, mv);
++        mv.visitInsn(Opcodes.ISUB);
++    }
++}
+Index: src/ir/ac/sbu/Semantics/ast/expression/binary/Sum.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/ir/ac/sbu/Semantics/ast/expression/binary/Sum.java	(date 1596064396940)
++++ src/ir/ac/sbu/Semantics/ast/expression/binary/Sum.java	(date 1596064396940)
+@@ -0,0 +1,20 @@
++package ir.ac.sbu.Semantics.ast.expression.binary;
++
++import ir.ac.sbu.Semantics.ast.expression.Expression;
++import org.objectweb.asm.ClassWriter;
++import org.objectweb.asm.MethodVisitor;
++import org.objectweb.asm.Opcodes;
++
++public class Sum extends BinaryExpression {
++
++    public Sum(Expression firstOperand, Expression secondOperand) {
++        super(firstOperand, secondOperand);
++    }
++
++    @Override
++    public void codegen(ClassWriter cw, MethodVisitor mv) {
++        getFirstOperand().codegen(cw, mv);
++        getSecondOperand().codegen(cw, mv);
++        mv.visitInsn(Opcodes.IADD);
++    }
++}
+Index: src/ir/ac/sbu/Semantics/ast/expression/constant/IntegerConst.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/ir/ac/sbu/Semantics/ast/expression/constant/IntegerConst.java	(date 1596064396905)
++++ src/ir/ac/sbu/Semantics/ast/expression/constant/IntegerConst.java	(date 1596064396905)
+@@ -0,0 +1,18 @@
++package ir.ac.sbu.Semantics.ast.expression.constant;
++
++import ir.ac.sbu.Semantics.ast.expression.Expression;
++import org.objectweb.asm.ClassWriter;
++import org.objectweb.asm.MethodVisitor;
++
++public class IntegerConst implements Expression {
++    private int value;
++
++    public IntegerConst(int value) {
++        this.value = value;
++    }
++
++    @Override
++    public void codegen(ClassWriter cw, MethodVisitor mv) {
++        mv.visitLdcInsn(value);
++    }
++}

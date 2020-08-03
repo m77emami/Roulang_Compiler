@@ -73,13 +73,13 @@ SpecialCharacter = [\t\r\n\"\'\\]  //\'[\\][^]\'
 <YYINITIAL>{
 //Reserved Key words
 "start"                     {return symbol("start");}
-"int"                     {return symbol("type_name");}
-"short"                   {return symbol("type_name");}
-"long"                    {return symbol("type_name");}
-"float"                   {return symbol("type_name");}
-"double"                  {return symbol("type_name");}
-"char"                    {return symbol("type_name");}
-"string"                  {return symbol("type_name");}
+"int"                     {return symbol("type_name", "int");}
+"short"                   {return symbol("type_name", "short");}
+"long"                    {return symbol("type_name", "long");}
+"float"                   {return symbol("type_name", "float");}
+"double"                  {return symbol("type_name", "double");}
+"char"                    {return symbol("type_name", "char");}
+"string"                  {return symbol("type_name", "string");}
 "const"                   {return symbol("const");}
 "for"                     {return symbol("for");}
 "foreach"                 {return symbol("foreach");}
@@ -101,7 +101,7 @@ SpecialCharacter = [\t\r\n\"\'\\]  //\'[\\][^]\'
 "static"                  {return symbol("static");}
 "goto"                    {return symbol("goto");}
 "signed"                  {return symbol("signed");}
-"bool"                    {return symbol("type_name");}
+"bool"                    {return symbol("type_name", "bool");}
 "void"                    {return symbol("void");}
 "return"                  {return symbol("return");}
 "record"                  {return symbol("record");}
@@ -110,6 +110,7 @@ SpecialCharacter = [\t\r\n\"\'\\]  //\'[\\][^]\'
 "function"                {return symbol("function");}
 "println"                 {return symbol("println");}
 "false"                   {return symbol("false");}
+"of"                   {return symbol("of");}
 
 //symbols
 "=="                    {return symbol("==");}

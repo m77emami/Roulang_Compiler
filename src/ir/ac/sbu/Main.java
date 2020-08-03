@@ -25,6 +25,7 @@ public class Main {
         try {
             // Parse given file
             parser.parse();
+
             // Get Root of AST
             result = codeGenerator.getResult();
         } catch (Exception e) {
@@ -34,7 +35,9 @@ public class Main {
 
         // Create a Test class to put expression java bytecode inside it.
         // In java, every code must be put inside a class.
+
         ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+
         classWriter.visit(Opcodes.V1_8, Opcodes.ACC_PUBLIC | Opcodes.ACC_SUPER, "Test", null, "java/lang/Object", null);
 
         // Create constructor of Test class to call it's super class. (It is java requirement)

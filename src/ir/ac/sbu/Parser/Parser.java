@@ -79,19 +79,19 @@ public class Parser {
         int tokenID = nextTokenID();
         int currentNode = startNode;
         boolean accepted = false;
-        while (!accepted | symbols[tokenID].equals("$")) {
+        while (!accepted) {
 
             String tokenText = symbols[tokenID];
             LLCell cell = parseTable[currentNode][tokenID];
             if (debugMode & (cell.getAction() == Action.SHIFT)) {
-                /*System.out.println("Current token: text='" + symbols[tokenID] + "' id=" + tokenID);
+                System.out.println("Current token: text='" + symbols[tokenID] + "' id=" + tokenID);
                 System.out.println("Current node: " + currentNode);
                 System.out.println("Current cell of parser table: " +
                         "target-node=" + cell.getTarget() +
                         " action=" + cell.getAction() +
                         " function=" + cell.getFunction());
-                System.out.println(String.join("", Collections.nCopies(50, "-")));*/
-                System.out.println(symbols[tokenID] + " " + cell.getTarget());
+                System.out.println(String.join("", Collections.nCopies(50, "-")));
+                //System.out.println(symbols[tokenID] + " " + cell.getTarget());
             }
             switch (cell.getAction()) {
                 case ERROR:

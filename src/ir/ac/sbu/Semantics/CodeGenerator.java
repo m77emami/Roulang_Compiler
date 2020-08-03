@@ -409,8 +409,8 @@ public class CodeGenerator implements ir.ac.sbu.Parser.CodeGenerator {
                 break;
             }
             case "pushBool": {
-                Object value = lexical.currentToken().getValue();
-                semanticStack.push(new BooleanConst((Boolean) value));
+                String value = (String) lexical.currentToken().getValue();
+                semanticStack.push(new BooleanConst(Boolean.parseBoolean(value)));
                 break;
             }
             case "pushChar": {

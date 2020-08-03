@@ -2,6 +2,7 @@ package ir.ac.sbu.Semantics.ast.declaration.variable;
 
 import ir.ac.sbu.Semantics.ast.expression.Expression;
 import ir.ac.sbu.Semantics.ast.expression.constant.ConstantExpression;
+import ir.ac.sbu.Semantics.ast.expression.unary.TypeCast;
 import ir.ac.sbu.Semantics.ast.expression.variable.SimpleVariable;
 import ir.ac.sbu.Semantics.ast.expression.variable.Variable;
 import ir.ac.sbu.Semantics.ast.statement.assignment.Assign;
@@ -66,9 +67,13 @@ public class SimpleVarDcl extends VarDCL {
             }
         } else if (exp != null) {
             exp.codegen(cw, mv);
-            if (!exp.getType().equals(type))
+            if (!exp.getType().equals(type)){
+                System.out.println(exp.getType());
+//                new TypeCast(exp, this.type).codegen(cw, mv);
                 throw new RuntimeException("the type of variable and expression doesn't match" +
                         "   " + "the type of var " + type + "   " + "the type of exp " + exp.getType());
+            }
+
             LocalVarDSCP dscp = (LocalVarDSCP) ScopeHandler.getInstance().getDescriptor(name);
             mv.visitVarInsn(type.getOpcode(ISTORE), dscp.getIndex());
         }

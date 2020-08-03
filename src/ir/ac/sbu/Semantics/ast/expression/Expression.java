@@ -10,6 +10,8 @@ abstract public class Expression implements AST {
         this.type = type;
     }
 
+    protected Expression(){}
+
     public Type getType(){
         if (type == null)
             throw new RuntimeException("Type is undefined.");
